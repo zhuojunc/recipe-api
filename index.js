@@ -14,6 +14,7 @@ app.get("/api/recipes", (request, response) => {
     client.connect().then(() => {
         client.query("SELECT * FROM recipes").then((queryResponse) => {
             response.json(queryResponse.rows);
+            client.end();
         });
     })
 });
@@ -23,6 +24,7 @@ app.get("/api/recipes/:id", (request, response) => {
     client.connect().then(() => {
         client.query("SELECT * FROM recipes WHERE id = $1", [request.params.id]).then((queryResponse) => {
             response.json(queryResponse.rows[0]);
+            client.end();
         });
     })
 });
@@ -32,6 +34,7 @@ app.get("/api/bookmark", (request, response) => {
     client.connect().then(() => {
         client.query("SELECT * FROM recipes WHERE bookmark").then((queryResponse) => {
             response.json(queryResponse.rows);
+            client.end();
         });
     })
 });
@@ -41,6 +44,7 @@ app.post("/api/category", (request, response) => {
     client.connect().then(() => {
         client.query(`SELECT * FROM recipes WHERE category = '${request.body.category}'`).then((queryResponse) => {
             response.json(queryResponse.rows);
+            client.end();
         });
     });
 });
@@ -50,6 +54,7 @@ app.post("/api/recipes", (request, response) => {
     client.connect().then(() => {
         client.query("INSERT INTO recipes (title, body, category, bookmark) VALUES ($1, $2, $3, $4) RETURNING *", [request.body.title, request.body.body, request.body.category, request.body.bookmark]).then((queryResponse) => {
             response.json(queryResponse.rows[0]);
+            client.end();
         });
     });    
 });
@@ -65,6 +70,7 @@ app.put("/api/recipes/:id", (request, response) => {
         )
         .then((queryResponse) => {
             response.json(queryResponse.rows[0]);
+            client.end();
         });
     });
   });
@@ -79,6 +85,7 @@ app.put("/api/recipes/:id", (request, response) => {
         )
         .then((queryResponse) => {
             response.json(queryResponse.rows[0]);
+            client.end();
         });
     });
   });
@@ -93,6 +100,7 @@ app.put("/api/recipes/:id", (request, response) => {
         )
         .then((queryResponse) => {
             response.json(queryResponse.rows[0]);
+            client.end();
         });
     });
   });
@@ -109,6 +117,7 @@ app.put("/api/recipes/:id", (request, response) => {
           } else {
             response.status(404).send();
           }
+          client.end();
         });
     });
   });
